@@ -9,7 +9,7 @@ int main(void)
 	const char* vertex_shader_src =
 		"#version 330 core\n"
 		"layout (location = 0) in vec2 pos;\n"
-		"void main() { gl_Position = vec4(pos, 0.0, 1.0); }\n";
+		"void main() { gl_Position = vec4(pos, 1.0, 1.0); }\n";
 	const char* fragment_shader_src =
 		"#version 330 core\n"
 		"out vec4 color;\n"
@@ -28,6 +28,7 @@ int main(void)
 	_glAttachShader(prog, vs);
 	_glAttachShader(prog, fs);
 	_glLinkProgram(prog);
+	_glUseProgram(prog);
 
 	// Vertex data
 	float vertices[] = {
@@ -49,8 +50,6 @@ int main(void)
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		_glUseProgram(prog);
-		_glBindVertexArray(vao);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -1,3 +1,4 @@
+#include <GLFW/glfw3.h>
 #include <shaders.h>
 
 PFNGLCREATESHADERPROC				_glCreateShader = NULL;
@@ -46,15 +47,13 @@ GLFWwindow *init_opengl(void)
 {
 	if (!glfwInit())
 		return NULL;
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+	
 	GLFWwindow *window = glfwCreateWindow(800, 600, "OpenGL Window", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return NULL;
 	}
+	glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_TRUE);
 	glfwMakeContextCurrent(window);
 	if (!load_opengl_functions()) {
 		glfwDestroyWindow(window);
