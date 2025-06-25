@@ -16,18 +16,18 @@ int main(void)
 		"void main() { color = vec4(1.0, 0.0, 0.0, 1.0); }\n";
 
 	// Compile shaders
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &vertex_shader_src, NULL);
-	glCompileShader(vs);
+	GLuint vs = _glCreateShader(GL_VERTEX_SHADER);
+	_glShaderSource(vs, 1, &vertex_shader_src, NULL);
+	_glCompileShader(vs);
 
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fragment_shader_src, NULL);
-	glCompileShader(fs);
+	GLuint fs = _glCreateShader(GL_FRAGMENT_SHADER);
+	_glShaderSource(fs, 1, &fragment_shader_src, NULL);
+	_glCompileShader(fs);
 
-	GLuint prog = glCreateProgram();
-	glAttachShader(prog, vs);
-	glAttachShader(prog, fs);
-	glLinkProgram(prog);
+	GLuint prog = _glCreateProgram();
+	_glAttachShader(prog, vs);
+	_glAttachShader(prog, fs);
+	_glLinkProgram(prog);
 
 	// Vertex data
 	float vertices[] = {
@@ -37,20 +37,20 @@ int main(void)
 	};
 
 	GLuint vao, vbo;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-	glEnableVertexAttribArray(0);
+	_glGenVertexArrays(1, &vao);
+	_glBindVertexArray(vao);
+	_glGenBuffers(1, &vbo);
+	_glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	_glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	_glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
+	_glEnableVertexAttribArray(0);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(prog);
-		glBindVertexArray(vao);
+		_glUseProgram(prog);
+		_glBindVertexArray(vao);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();

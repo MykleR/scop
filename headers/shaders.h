@@ -1,50 +1,31 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <GL/gl.h>
 #include <assert.h>
 #include <stdbool.h>
 
-#define LOAD_PROC(type, name) \
-    name = (type)glfwGetProcAddress(#name); \
-	if (!name) return false; \
+#define LOAD_PROC(type, var, name) \
+    var = (type)glfwGetProcAddress(#name); \
+	if (!var) return false; \
 
-// Function pointer types for OpenGL functions we need
-typedef void (*GL_GENVERTEXARRAYS)(GLsizei, GLuint*);
-typedef void (*GL_BINDVERTEXARRAY)(GLuint);
-typedef void (*GL_GENBUFFERS)(GLsizei, GLuint*);
-typedef void (*GL_BINDBUFFER)(GLenum, GLuint);
-typedef void (*GL_BUFFERDATA)(GLenum, ptrdiff_t, const void*, GLenum);
-typedef void (*GL_VERTEXATTRIBPOINTER)(GLuint, GLint, GLenum, GLboolean, GLsizei, const void*);
-typedef void (*GL_ENABLEVERTEXATTRIBARRAY)(GLuint);
-typedef GLuint (*GL_CREATESHADER)(GLenum);
-typedef void (*GL_SHADER_SOURCE)(GLuint, GLsizei, const GLchar* const*, const GLint*);
-typedef void (*GL_COMPILESHADER)(GLuint);
-typedef GLuint (*GL_CREATEPROGRAM)(void);
-typedef void (*GL_ATTACHSHADER)(GLuint, GLuint);
-typedef void (*GL_LINKPROGRAM)(GLuint);
-typedef void (*GL_USEPROGRAM)(GLuint);
-typedef void (*GL_DELETEVERTEXARRAYS)(GLsizei, const GLuint*);
-typedef void (*GL_DELETEBUFFERS)(GLsizei, const GLuint*);
-typedef void (*GL_DELETEPROGRAM)(GLuint);
-typedef void (*GL_DELETESHADER)(GLuint);
-
-extern GL_GENVERTEXARRAYS glGenVertexArrays;
-extern GL_BINDVERTEXARRAY glBindVertexArray;
-extern GL_GENBUFFERS glGenBuffers;
-extern GL_BINDBUFFER glBindBuffer;
-extern GL_BUFFERDATA glBufferData;
-extern GL_VERTEXATTRIBPOINTER glVertexAttribPointer;
-extern GL_ENABLEVERTEXATTRIBARRAY glEnableVertexAttribArray;
-extern GL_CREATESHADER glCreateShader;
-extern GL_SHADER_SOURCE glShaderSource;
-extern GL_COMPILESHADER glCompileShader;
-extern GL_CREATEPROGRAM glCreateProgram;
-extern GL_ATTACHSHADER glAttachShader;
-extern GL_LINKPROGRAM glLinkProgram;
-extern GL_USEPROGRAM glUseProgram;
-extern GL_DELETEVERTEXARRAYS glDeleteVertexArrays;
-extern GL_DELETEBUFFERS glDeleteBuffers;
-extern GL_DELETEPROGRAM glDeleteProgram;
-extern GL_DELETESHADER glDeleteShader;
+extern PFNGLCREATESHADERPROC			_glCreateShader;
+extern PFNGLSHADERSOURCEPROC			_glShaderSource;
+extern PFNGLCOMPILESHADERPROC			_glCompileShader;
+extern PFNGLCREATEPROGRAMPROC			_glCreateProgram;
+extern PFNGLATTACHSHADERPROC			_glAttachShader;
+extern PFNGLLINKPROGRAMPROC				_glLinkProgram;
+extern PFNGLUSEPROGRAMPROC				_glUseProgram;
+extern PFNGLGENVERTEXARRAYSPROC			_glGenVertexArrays;
+extern PFNGLBINDVERTEXARRAYPROC			_glBindVertexArray;
+extern PFNGLGENBUFFERSPROC				_glGenBuffers;
+extern PFNGLBINDBUFFERPROC				_glBindBuffer;
+extern PFNGLBUFFERDATAPROC				_glBufferData;
+extern PFNGLVERTEXATTRIBPOINTERPROC		_glVertexAttribPointer;
+extern PFNGLENABLEVERTEXATTRIBARRAYPROC	_glEnableVertexAttribArray;
+extern PFNGLDELETEVERTEXARRAYSPROC		_glDeleteVertexArrays;
+extern PFNGLDELETEBUFFERSPROC			_glDeleteBuffers;
+extern PFNGLDELETEPROGRAMPROC			_glDeleteProgram;
+extern PFNGLDELETESHADERPROC			_glDeleteShader;
 
 typedef enum e_shader_type {
 	SHADER_VERTEX,
