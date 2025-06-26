@@ -1,40 +1,30 @@
+#include "debug.h"
+#include "shaders.h"
 #include <scop.h>
 
 int main(void)
 {
-	GLFWwindow *window;
-	if (!(window = init_opengl()))
+	GLFWwindow *window = init_opengl();
+	if (__builtin_expect(window == NULL, 0))
 		return EXIT_FAILURE;
-
-	const char* vertex_shader_src =
-		"#version 330 core\n"
-		"layout (location = 0) in vec2 pos;\n"
-		"void main() { gl_Position = vec4(pos, 1.0, 1.0); }\n";
-	const char* fragment_shader_src =
-		"#version 330 core\n"
-		"out vec4 color;\n"
-		"void main() { color = vec4(1.0, 0.0, 0.0, 1.0); }\n";
+	LOG_OK("OpenGL initialized successfully");
 
 	// Compile shaders
-	GLuint vs = _glCreateShader(GL_VERTEX_SHADER);
-	_glShaderSource(vs, 1, &vertex_shader_src, NULL);
-	_glCompileShader(vs);
-
-	GLuint fs = _glCreateShader(GL_FRAGMENT_SHADER);
-	_glShaderSource(fs, 1, &fragment_shader_src, NULL);
-	_glCompileShader(fs);
-
-	GLuint prog = _glCreateProgram();
-	_glAttachShader(prog, vs);
-	_glAttachShader(prog, fs);
-	_glLinkProgram(prog);
-	_glUseProgram(prog);
+	GLuint program;
+	if (shader_program(VERTEX_SSRC, FRAGMENT_SSRC, &program) == ERR_CODE)
+	{
+		LOG_ERR("Failed to create shader program");
+		glfwDestroyWindow(window);
+		glfwTerminate();
+		return EXIT_FAILURE;
+	} LOG_OK("Shader program created successfully");
 
 	// Vertex data
 	float vertices[] = {
-		 0.0f,  0.8f,
-		-0.8f, -0.8f,
-		 0.8f, -0.8f
+		// positions       // colors        // tex coords
+		 0.5f, -0.5f, 0.0f,  1, 0, 0,        1, 0,
+		-0.5f, -0.5f, 0.0f,  0, 1, 0,        0, 0,
+		 0.0f,  0.5f, 0.0f,  0, 0, 1,        0.5, 1
 	};
 
 	GLuint vao, vbo;
@@ -43,16 +33,27 @@ int main(void)
 	_glGenBuffers(1, &vbo);
 	_glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	_glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	_glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
-	_glEnableVertexAttribArray(0);
+	
+	// position
+    _glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    _glEnableVertexAttribArray(0);
+    // color
+    _glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    _glEnableVertexAttribArray(1);
+    // texcoord
+    _glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    _glEnableVertexAttribArray(2);
+	_glUseProgram(program);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
+		glfwPollEvents();
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, 1);
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
 
 	glfwDestroyWindow(window);

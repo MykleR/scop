@@ -1,12 +1,54 @@
 #pragma once
-#include <GLFW/glfw3.h>
-#include <GL/gl.h>
-#include <assert.h>
-#include <stdbool.h>
 
-#define LOAD_PROC(type, var, name) \
+# include <GLFW/glfw3.h>
+# include <GL/gl.h>
+# include <assert.h>
+# include <stdio.h>
+
+# include <debug.h>
+
+# define ERR_CODE 0
+# define OK_CODE 1
+
+# define VERTEX_SSRC "#version 330 core\n"\
+"layout(location = 0) in vec3 aPos;\n"\
+"layout(location = 1) in vec3 aColor;\n"\
+"layout(location = 2) in vec2 aTexCoord;\n"\
+"out vec3 ourColor;\n"\
+"out vec2 TexCoord;\n"\
+"void main() {\n"\
+"    gl_Position = vec4(aPos, 1.0);\n"\
+"    ourColor = aColor;\n"\
+"    TexCoord = aTexCoord;\n"\
+"}"
+
+# define FRAGMENT_SSRC "#version 330 core\n"\
+"in vec3 ourColor;\n"\
+"in vec2 TexCoord;\n"\
+"out vec4 FragColor;\n"\
+"uniform bool useTexture;\n"\
+"void main() {\n"\
+"    if (useTexture)\n"\
+"        FragColor = vec4(TexCoord, 0.0, 1.0);\n"\
+"    else\n"\
+"        FragColor = vec4(ourColor, 1.0);\n"\
+"}"
+
+# define __LOAD_PROC(type, var, name) \
     var = (type)glfwGetProcAddress(#name); \
-	if (!var) return false; \
+	if (!var) return 0; \
+
+# define __SHADER_ERROR(type, shader) { \
+	char log[512]; \
+	_glGetShaderInfoLog(shader, 512, NULL, log); \
+	LOG_ERR("Shader compile error: %s", log); \
+	return ERR_CODE; }
+
+# define __PROGRAM_ERROR(program) { \
+	char log[512]; \
+	_glGetProgramInfoLog(program, 512, NULL, log); \
+	LOG_ERR("Program link error: %s", log); \
+	return ERR_CODE; }
 
 extern PFNGLCREATESHADERPROC			_glCreateShader;
 extern PFNGLSHADERSOURCEPROC			_glShaderSource;
@@ -26,6 +68,10 @@ extern PFNGLDELETEVERTEXARRAYSPROC		_glDeleteVertexArrays;
 extern PFNGLDELETEBUFFERSPROC			_glDeleteBuffers;
 extern PFNGLDELETEPROGRAMPROC			_glDeleteProgram;
 extern PFNGLDELETESHADERPROC			_glDeleteShader;
+extern PFNGLGETSHADERIVPROC				_glGetShaderiv;
+extern PFNGLGETSHADERINFOLOGPROC		_glGetShaderInfoLog;
+extern PFNGLGETPROGRAMIVPROC			_glGetProgramiv;
+extern PFNGLGETPROGRAMINFOLOGPROC		_glGetProgramInfoLog;
 
 typedef enum e_shader_type {
 	SHADER_VERTEX,
@@ -36,7 +82,6 @@ typedef enum e_shader_type {
 
 GLFWwindow *init_opengl(void);
 
-GLuint compile_shader(GLenum type, const char* src);
+int	shader_load(GLenum type, const char* src, GLuint* out_shader);
 
-GLuint create_shader_program(const char* vsrc, const char* fsrc);
-
+int	shader_program(const char* vsrc, const char* fsrc, GLuint* out_program);

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mrouves <marvin@42.fr>                     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/08 18:27:35 by mrouves           #+#    #+#              #
-#    Updated: 2025/06/25 19:23:19 by mykle            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 include sources/sources.mk
 
 NAME 			:= scop
@@ -23,7 +11,7 @@ OBJS			:= $(addprefix $(DIR_OBJS)/, $(SOURCES:%.c=%.o))
 OBJS_BONUS		:= $(addprefix $(DIR_OBJS)/, $(SOURCES_BONUS:%.c=%.o))
 
 CC				:= clang
-CFLAGS			:= -Wall -Wextra -Werror
+CFLAGS			:= -Wall -Wextra -Werror -std=c23
 LDFLAGS			:= -lm  -lglfw -ldl -lGL
 IFLAGS			:= -I $(DIR_HEADERS)
 DIR_DUP			= mkdir -p $(@D)
