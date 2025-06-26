@@ -22,9 +22,9 @@ int main(void)
 	// Vertex data
 	float vertices[] = {
 		// positions       // colors        // tex coords
-		 0.5f, -0.5f, 0.0f,  1, 0, 0,        1, 0,
-		-0.5f, -0.5f, 0.0f,  0, 1, 0,        0, 0,
-		 0.0f,  0.5f, 0.0f,  0, 0, 1,        0.5, 1
+		 1.0f, -1.0f, 0.0f,  1, 0, 0,        1, 0,
+		-1.0f, -1.0f, 0.0f,  0, 1, 0,        0, 0,
+		 0.0f,  1.0f, 0.0f,  0, 0, 1,        0.5, 1
 	};
 
 	GLuint vao, vbo;
@@ -47,6 +47,7 @@ int main(void)
 
 	// Main loop
 	while (!glfwWindowShouldClose(window)) {
+		_glUniform1f(_glGetUniformLocation(program, "iTime"), (int)glfwGetTime() % 60); 
 		glfwPollEvents();
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, 1);

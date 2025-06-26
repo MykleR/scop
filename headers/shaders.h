@@ -26,12 +26,8 @@
 "in vec3 ourColor;\n"\
 "in vec2 TexCoord;\n"\
 "out vec4 FragColor;\n"\
-"uniform bool useTexture;\n"\
 "void main() {\n"\
-"    if (useTexture)\n"\
-"        FragColor = vec4(TexCoord, 0.0, 1.0);\n"\
-"    else\n"\
-"        FragColor = vec4(ourColor, 1.0);\n"\
+"   FragColor = vec4(ourColor, 1.0);\n"\
 "}"
 
 # define __LOAD_PROC(type, var, name) \
@@ -72,6 +68,9 @@ extern PFNGLGETSHADERIVPROC				_glGetShaderiv;
 extern PFNGLGETSHADERINFOLOGPROC		_glGetShaderInfoLog;
 extern PFNGLGETPROGRAMIVPROC			_glGetProgramiv;
 extern PFNGLGETPROGRAMINFOLOGPROC		_glGetProgramInfoLog;
+extern PFNGLGETUNIFORMLOCATIONPROC		_glGetUniformLocation;
+extern PFNGLUNIFORM2FVPROC				_glUniform2fv;
+extern PFNGLUNIFORM1FPROC				_glUniform1f;
 
 typedef enum e_shader_type {
 	SHADER_VERTEX,
