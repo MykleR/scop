@@ -1,12 +1,13 @@
 #pragma once
 
+# include <stdio.h>
+
 /*
  * @brief:
  * Debugging functions/macros (Verbose)
- * 
+ *
  * @Colors:
 */
-
 # define	BOLD(X)				"\033[1m" X "\033[22m"
 # define 	ITALIC(X)			"\033[3m" X "\033[23m"
 # define	RESET				"\033[0m"
@@ -18,11 +19,6 @@
 # define	CYAN				"\033[36m"
 # define	GRAY				"\033[90m"
 # define 	COLOR(C, X)			C X RESET
-
-#include <stdio.h>
-
-/*@brief: If the program is compile with verbose mode (make re NVERBOSE=1), 
- * All prints disabled, else prints regularly*/
 
 # ifndef NVERBOSE
 #  define __LOG(c, t, msg, ...)	\
