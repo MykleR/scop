@@ -26,7 +26,7 @@
 
 # define EXCEPTION(name, msg)												\
 class name : public std::exception {										\
-	inline const char *what() const throw() { return (msg) ; } ; }
+	inline const char *what() const throw() { return (msg) ; } ; };
 
 # define EXCEPTION_MSG(name)												\
 class name : public std::exception {										\
@@ -36,3 +36,11 @@ class name : public std::exception {										\
     virtual ~name() throw() {}												\
     virtual const char* what() const throw() {return msg.c_str();}			\
 };
+
+# define CATCH()															\
+	catch (const std::exception& e)											\
+	{LOG_ERR("%s", e.what());}
+
+# define CATCH_RET(ret)														\
+	catch (const std::exception& e)											\
+	{LOG_ERR("%s", e.what()); return ret;}

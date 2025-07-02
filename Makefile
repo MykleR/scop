@@ -11,8 +11,8 @@ OBJECTS			:= $(SOURCES:%.cpp=$(DIR_OBJECTS)/%.o)
 DEPENDENCIES	:= $(OBJECTS:.o=.d)
 
 CXX				:= -g++
-CXXFLAGS 		:= -pedantic-errors -Wall -Wextra -Werror -std=c++20
-LDFLAGS  		:= -lstdc++ -lm -lglfw -lvulkan -lpthread
+CXXFLAGS 		:= -pedantic-errors -Wall -Wextra -Werror -std=c++20 -O3
+LDFLAGS  		:= -lstdc++ -lm -lglfw -lpthread -lGLEW -lGL -ldl -lboost_iostreams
 IFLAGS			:= -I $(DIR_HEADERS)
 DIR_DUP			= mkdir -p $(@D)
 

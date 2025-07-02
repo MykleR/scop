@@ -2,6 +2,6 @@
 
 int main(void)
 {
-	VulkanApp app;
+	OpenglApp app;
 	return app.run();
 }
